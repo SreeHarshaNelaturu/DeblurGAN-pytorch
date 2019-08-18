@@ -33,7 +33,6 @@ def deblur_image(model, inputs):
     # start to deblur
     with torch.no_grad():
         blurred = inputs['blurred']
-
         transform = transforms.Compose([transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
         blurred = transform(blurred)
@@ -50,5 +49,5 @@ def deblur_image(model, inputs):
 
         #deblurred_img.save("./deblurred.png")
         return deblurred_img
-    if __name__ == '__main__':
-        runway.run()
+if __name__ == '__main__':
+    runway.run()
