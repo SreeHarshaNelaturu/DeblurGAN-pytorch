@@ -11,7 +11,7 @@ def setup(opts):
     print("++++++ Model Loaded ++++++")
 
     return checkpoint, config
-inputs = {"blurred_images_directory" : file(is_directory=True)}
+inputs = {"blurred_images_directory" : image(is_directory=True)}
 outputs = {"output_images_directory" : file(is_directory=True)}
 
 
