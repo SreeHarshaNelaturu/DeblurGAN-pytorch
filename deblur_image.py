@@ -1,21 +1,13 @@
 import os
 import argparse
-import math
-from PIL import Image
-from tqdm import tqdm
 from torchvision.transforms.functional import to_pil_image
 import torch
-import cv2
 import model.model as module_arch
-from data_loader.data_loader import CustomDataLoader
 from utils.util import denormalize
-from torch import Tensor
-import numpy as np
 from PIL import Image
-import torchvision.transforms.functional as TF
 from torchvision import transforms
 
-def main(blurred_image, deblurred_dir, resume):
+def main(blurred_image, resume):
     # load checkpoint
     checkpoint = torch.load(resume)
     config = checkpoint['config']

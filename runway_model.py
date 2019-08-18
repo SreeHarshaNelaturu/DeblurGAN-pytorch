@@ -1,5 +1,3 @@
-import numpy as np
-import torch
 import runway
 from runway.data_types import *
 from deblur_image import *
