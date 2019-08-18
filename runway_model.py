@@ -50,5 +50,5 @@ def deblur_image(model, inputs):
 
         #deblurred_img.save("./deblurred.png")
         return deblurred_img
-    if __name__ == '__main__':
-        runway.run()
+if __name__ == '__main__':
+    runway.run()
