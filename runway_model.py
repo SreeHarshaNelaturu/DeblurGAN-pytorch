@@ -32,7 +32,7 @@ def deblur_image(model, inputs):
 
     # start to deblur
     with torch.no_grad():
-        blurred = Image.open(inputs['blurred']).convert('RGB')
+        blurred = inputs['blurred']
         h = blurred.size[1]
         w = blurred.size[0]
         new_h = h - h % 4 + 4 if h % 4 != 0 else h
