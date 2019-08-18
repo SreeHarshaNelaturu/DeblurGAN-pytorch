@@ -3,7 +3,7 @@ import torch
 import runway
 from runway.data_types import *
 from deblur_image import *
-@runway.setup(options={'checkpoint': runway.file(extension='.pkl')})
+@runway.setup(options={'checkpoint': file(extension='.pth')})
 def setup(opts):
     print("++++++ Loading Model +++++++")
     checkpoint = torch.load(opts['checkpoint'])
