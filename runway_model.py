@@ -1,3 +1,5 @@
+import numpy as np
+import torch
 import runway
 from runway.data_types import *
 from deblur_image import *
@@ -9,12 +11,13 @@ def setup(opts):
     print("++++++ Model Loaded ++++++")
 
     return checkpoint, config
-inputs = {"input_image": image(width=512, height=512)}
-outputs = {"output_image": image(width=512, height=512)}
+inputs = {"blurred": image}
+outputs = {"deblurred": image}
 
 
 @runway.command('deblur_image', inputs=inputs, outputs=outputs, description='Deblur an Image')
-def deblur_image(checkpoint, config, args):
+def deblur_image(model, args):
+    checkpoint, config = model
     #data_loader = CustomDataLoader(data_dir=args["image"])
     generator_class = getattr(module_arch, config['generator']['type'])
     generator = generator_class(**config['generator']['args'])
@@ -31,7 +34,7 @@ def deblur_image(checkpoint, config, args):
 
     # start to deblur
     with torch.no_grad():
-        blurred = Image.open(args["input_image"]).convert('RGB')
+        blurred = Image.open(inputs['blurred']).convert('RGB')
         h = blurred.size[1]
         w = blurred.size[0]
         new_h = h - h % 4 + 4 if h % 4 != 0 else h
@@ -47,7 +50,7 @@ def deblur_image(checkpoint, config, args):
         deblurred = generator(blurred)
         deblurred_img = to_pil_image(denormalize(deblurred).squeeze().cpu())
 
-        return {'output_image ' : deblurred_img}
-
+        #deblurred_img.save("./deblurred.png")
+        return {"deblurred": deblurred_img}
 if __name__ == '__main__':
     runway.run()
