@@ -5,5 +5,8 @@ cuda: 10.0
 spec:
   gpu: True
   cpu: False
+files:
+  ignore:
+      -pretrained checkpoints/*
 build_steps:
   - pip install -r requirements.txt
