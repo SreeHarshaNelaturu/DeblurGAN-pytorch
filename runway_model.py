@@ -11,14 +11,14 @@ def setup(opts):
     print("++++++ Model Loaded ++++++")
 
     return checkpoint, config
-inputs = {"blurred_images_directory" : image(is_directory=True)}
-outputs = {"output_images_directory" : file(is_directory=True)}
+inputs = {"input_image": image(width=512, height=512)}
+outputs = {"output_image": image(width=512, height=512)}
 
 
 @runway.command('deblur_image', inputs=inputs, outputs=outputs, description='Deblur an Image')
 def deblur_image(model, args):
     checkpoint, config = model
-    data_loader = CustomDataLoader(data_dir=args["blurred_images_directory"])
+    #data_loader = CustomDataLoader(data_dir=args["image"])
     generator_class = getattr(module_arch, config['generator']['type'])
     generator = generator_class(**config['generator']['args'])
 
@@ -34,14 +34,23 @@ def deblur_image(model, args):
 
     # start to deblur
     with torch.no_grad():
-        for batch_idx, sample in enumerate(tqdm(data_loader, ascii=True)):
-            blurred = sample['blurred'].to(device)
-            image_name = sample['image_name'][0]
+        blurred = Image.open(args["input_image"]).convert('RGB')
+        h = blurred.size[1]
+        w = blurred.size[0]
+        new_h = h - h % 4 + 4 if h % 4 != 0 else h
+        new_w = w - w % 4 + 4 if w % 4 != 0 else w
+        blurred = transforms.Resize([new_h, new_w], Image.BICUBIC)(blurred)
+        transform = transforms.Compose([
+            transforms.ToTensor(),  # convert to tensor
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        blurred = transform(blurred)
+        blurred.unsqueeze_(0)
+        print(blurred.shape)
+        blurred = blurred.to(device)
+        deblurred = generator(blurred)
+        deblurred_img = to_pil_image(denormalize(deblurred).squeeze().cpu())
 
-            deblurred = generator(blurred)
-            deblurred_img = to_pil_image(denormalize(deblurred).squeeze().cpu())
-
-            deblurred_img.save(os.path.join(args["output_images_directory"], 'deblurred ' + image_name))
+        return {'output_image ' : deblurred_img}
 
 if __name__ == '__main__':
     runway.run()

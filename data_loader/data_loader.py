@@ -43,7 +43,7 @@ class CustomDataLoader(DataLoader):
     Custom data loader for image deblurring
     """
 
-    def __init__(self, data_dir):
+    def __init__(self, ata_dir):
         transform = transforms.Compose([
             transforms.ToTensor(),  # convert to tensor
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))  # normalize
