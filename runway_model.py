@@ -32,16 +32,16 @@ def deblur_image(model, inputs):
 
     # start to deblur
     with torch.no_grad():
-        blurred = Image.open(inputs['blurred']).convert('RGB')
+        blurred = inputs['blurred']
+
+        transform = transforms.Compose([transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        blurred = transform(blurred)
         h = blurred.size[1]
         w = blurred.size[0]
         new_h = h - h % 4 + 4 if h % 4 != 0 else h
         new_w = w - w % 4 + 4 if w % 4 != 0 else w
         blurred = transforms.Resize([new_h, new_w], Image.BICUBIC)(blurred)
-        transform = transforms.Compose([
-            transforms.ToTensor(),  # convert to tensor
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-        blurred = transform(blurred)
         blurred.unsqueeze_(0)
         print(blurred.shape)
         blurred = blurred.to(device)
