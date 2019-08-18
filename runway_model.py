@@ -14,8 +14,7 @@ outputs = {"output_image": image(width=512, height=512)}
 
 
 @runway.command('deblur_image', inputs=inputs, outputs=outputs, description='Deblur an Image')
-def deblur_image(model, args):
-    checkpoint, config = model
+def deblur_image(checkpoint, config, args):
     #data_loader = CustomDataLoader(data_dir=args["image"])
     generator_class = getattr(module_arch, config['generator']['type'])
     generator = generator_class(**config['generator']['args'])
