@@ -62,4 +62,4 @@ if __name__ == '__main__':
     if args.device:
         os.environ["CUDA_VISIBLE_DEVICES"] = args.device
 
-    main(args.blurred, args.deblurred, args.resume)
+    main(args.blurred, args.resume)

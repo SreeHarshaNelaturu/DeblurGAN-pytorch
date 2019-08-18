@@ -51,6 +51,6 @@ def deblur_image(model, args):
         deblurred_img = to_pil_image(denormalize(deblurred).squeeze().cpu())
 
         #deblurred_img.save("./deblurred.png")
-        return {"deblurred": deblurred_img}
+        return deblurred_img
 if __name__ == '__main__':
     runway.run()
