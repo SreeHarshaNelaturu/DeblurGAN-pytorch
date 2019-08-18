@@ -16,7 +16,6 @@ outputs = {"deblurred": image}
 
 @runway.command('deblur_image', inputs=inputs, outputs=outputs, description='Deblur an Image')
 def deblur_image(model, inputs):
-    
     config = model['config']
     generator_class = getattr(module_arch, config['generator']['type'])
     generator = generator_class(**config['generator']['args'])
@@ -52,4 +51,4 @@ def deblur_image(model, inputs):
         #deblurred_img.save("./deblurred.png")
         return deblurred_img
     if __name__ == '__main__':
-    runway.run()
+        runway.run()
